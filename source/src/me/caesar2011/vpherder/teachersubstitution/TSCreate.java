@@ -9,9 +9,11 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
 import me.caesar2011.vpherder.R;
+import me.caesar2011.vpherder.views.PullToRefreshListView;
+import me.caesar2011.vpherder.views.PullToRefreshListView.OnRefreshListener;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -21,7 +23,6 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 /**
  * Class to organize the drawings of the teacher substition.
@@ -35,6 +36,9 @@ public class TSCreate {
 	private final LayoutInflater inflater;
 	private final ViewGroup container;
 	private static TSjsonObject JsonObject;
+	private boolean downloadStarted;
+	private TSAdapter adapter;
+	private PullToRefreshListView listview;
 
 	/**
 	 * Constructor
@@ -43,26 +47,10 @@ public class TSCreate {
 		this.activity = activity;
 		this.inflater = inflater;
 		this.container = container;
+		this.downloadStarted = false;
 		
 		if(JsonObject == null){
-			try {
-				URL url = new URL("https://vpherder.canis.uberspace.de/example.json");
-				
-				DownloadFilesTask downloadSubstitutions = new DownloadFilesTask();
-				downloadSubstitutions.execute(url);
-				downloadSubstitutions.get();
-				String theString = downloadSubstitutions.getOutput()[0];
-				
-				JsonObject = new TSjsonObject(theString);
-			} catch (ExecutionException e) {
-				System.out.println("ERRRRRRRRRRRRRRRRRRRRROR ExecutionException!");
-			} catch (InterruptedException e) {
-				System.out.println("ERRRRRRRRRRRRRRRRRRRRROR InterruptedException!");
-			} catch (JSONException e) {
-				System.out.println("ERRRRRRRRRRRRRRRRRRRRROR JSONException!");
-			} catch (MalformedURLException e) {
-				System.out.println("ERRRRRRRRRRRRRRRRRRRRROR MalformedURLException!");
-			}
+			StartDownload();
 		}
 	}
 	
@@ -70,49 +58,71 @@ public class TSCreate {
 		View rootView = inflater.inflate(R.layout.fragment_teacher_substitution,
 				container, false);
 		
-		final ListView listview = (ListView) rootView.findViewById(R.id.listview);
-		
-	    final TSAdapter adapter = new TSAdapter(activity,
-	    		R.layout.teacher_substitution_row_remark, JsonObject.announcements);
+		listview = (PullToRefreshListView) rootView.findViewById(R.id.listview);
+		listview.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				StartDownload();
+			}
+			
+		});
+		System.out.println(JsonObject);
+	    adapter = new TSAdapter(activity,
+	    		R.layout.teacher_substitution_row_remark, (JsonObject!=null)?JsonObject.announcements:(new ArrayList<TSjsonAnnouncement>()));
 	    listview.setAdapter(adapter);
-	    
 		return rootView;
 	}
 
-	
-	
-	private class DownloadFilesTask extends AsyncTask<URL, Integer, String[]> {
-		private String[] outputFiles;
-		
-		protected String[] doInBackground(URL... urls) {
-	        int count = urls.length;
-	        String[] files = new String[count];
-	        for (int i = 0; i < count; i++) {
-				URLConnection connection;
-				try {
-					connection = urls[i].openConnection();
-					InputStream inputStream = connection.getInputStream();
-	            	publishProgress((int) ((i / (float) count) * 100));
+	public void StartDownload() {
+		if (!downloadStarted) {
+			downloadStarted = true;
+			try {
+				URL url = new URL("https://vpherder.canis.uberspace.de/example.json");
+				DownloadFilesTask downloadSubstitutions = new DownloadFilesTask();
+				downloadSubstitutions.execute(url);
+			} catch (MalformedURLException e) {
+				downloadStarted = false;
+			}
+		}
+	}
 
-					StringWriter writer = new StringWriter();
-					IOUtils.copy(inputStream, writer, "UTF-8");
-					files[i] = writer.toString();
-				} catch (IOException e) {
-				}
-	            
-	            // Escape early if cancel() is called
-	            if (isCancelled()) break;
-	        }
-	        outputFiles = files;
-	        return files;
+	public void FinishDownload() {
+		downloadStarted = false;
+		adapter.clear();
+		adapter.addAll(JsonObject.announcements);
+		adapter.notifyDataSetChanged();
+		listview.onRefreshComplete();
+	}
+	
+	private class DownloadFilesTask extends AsyncTask<URL, Integer, String> {
+		
+		protected String doInBackground(URL... urls) {
+			String file = "";
+	        URL url = urls[0];
+			URLConnection connection;
+			try {
+				connection = url.openConnection();
+				InputStream inputStream = connection.getInputStream();
+
+				StringWriter writer = new StringWriter();
+				IOUtils.copy(inputStream, writer, "UTF-8");
+				file = writer.toString();
+			} catch (IOException e) {
+			}
+	        return file;
 	    }
 
 		protected void onProgressUpdate(Integer... progress) {
 	        //setProgressPercent(progress[0]);
 	    }
 		
-		protected String[] getOutput() {
-			return outputFiles;
+		protected void onPostExecute(String result) {
+			try {
+				JsonObject = new TSjsonObject(result);
+			} catch (JSONException e) {
+			}
+			FinishDownload();
 		}
 	}
 }

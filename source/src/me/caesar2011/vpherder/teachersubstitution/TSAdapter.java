@@ -62,7 +62,7 @@ public class TSAdapter extends ArrayAdapter<TSjsonAnnouncement> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         int type = getItemViewType(position);
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             switch (type) {
                 case AnnounceType.REMARK:
                     convertView = mInflater.inflate(R.layout.teacher_substitution_row_remark, null);

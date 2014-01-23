@@ -21,6 +21,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	private View mHeaderView;
 	private HeaderViewHolder mHeaderViewHolder;
 	private int mLastTopVisiblePos;
+	private OnRefreshListener mOnRefreshListener;
 	
 	private static final int PULL_DOWN_LIMIT = (int) Math.round(0.75 * DisplayMetrics.DENSITY_DEFAULT);
 	
@@ -48,6 +49,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
         mHeaderView = mInflater.inflate(R.layout.pull_to_refresh_header, null);
         mHeaderViewHolder = new HeaderViewHolder(mHeaderView);
         addHeaderView(mHeaderView);
+        System.out.println("k"+mHeaderView);
         
         mRefreshState = RefreshState.PULL_TO_REFRESH;
 	}
@@ -68,7 +70,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
     	boolean isHandled = false;
     	
     	if (event.getAction() == MotionEvent.ACTION_DOWN || mLastTopVisiblePos == 1) {
-    		int refreshBoxHeight = (int) ((mRefreshState == RefreshState.REFRESHING)?PULL_DOWN_LIMIT+15:1);
+    		int refreshBoxHeight = (int) ((mRefreshState == RefreshState.REFRESHING)?PULL_DOWN_LIMIT:1);
     		mStartX = event.getRawX();
     		mStartY = event.getRawY()-refreshBoxHeight;
     		mHeaderViewHolder.setVisibility(View.VISIBLE);
@@ -76,9 +78,6 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
         }
     	if (event.getRawY()-mStartY > Math.abs(event.getRawX()-mStartX) && getFirstVisiblePosition() == 0) {
 	    	int stretch = (int) Math.max(0, event.getRawY()-mStartY);
-        	System.out.println(event.getRawY()-mStartY);
-        	System.out.println(Math.abs(event.getRawX()-mStartX));
-        	System.out.println("--");
 	    	mHeaderView.setLayoutParams(new LayoutParams(mHeaderView.getLayoutParams().width, stretch));
 	    	if (mRefreshState == RefreshState.PULL_TO_REFRESH && stretch > PULL_DOWN_LIMIT) {
 	    		mRefreshState = RefreshState.RELEASE_TO_REFRESH;
@@ -89,7 +88,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	    	} else if (mRefreshState == RefreshState.ABORTING && stretch > PULL_DOWN_LIMIT) {
 	    		mRefreshState = RefreshState.RELEASE_TO_REFRESH;
 	    		mHeaderViewHolder.setRefreshingState(mRefreshState);
-	    	} else if (mRefreshState == RefreshState.REFRESHING && stretch <= PULL_DOWN_LIMIT) {
+	    	} else if (mRefreshState == RefreshState.REFRESHING && stretch <= PULL_DOWN_LIMIT/2) {
 	    		mRefreshState = RefreshState.ABORTING;
 	    		mHeaderViewHolder.setRefreshingState(mRefreshState);
 	    	}
@@ -104,10 +103,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
         		mHeaderView.setLayoutParams(new LayoutParams(mHeaderView.getLayoutParams().width, 0));
         		break;
         	case RefreshState.RELEASE_TO_REFRESH:
-        		mHeaderViewHolder.setVisibility(View.VISIBLE);
-        		mRefreshState = RefreshState.REFRESHING;
-        		mHeaderViewHolder.setRefreshingState(mRefreshState);
-        		mHeaderView.setLayoutParams(new LayoutParams(mHeaderView.getLayoutParams().width, PULL_DOWN_LIMIT));
+        		Refresh();
         		break;
         	case RefreshState.REFRESHING:
         		mHeaderView.setLayoutParams(new LayoutParams(mHeaderView.getLayoutParams().width, PULL_DOWN_LIMIT));
@@ -161,5 +157,31 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
     	public static final int RELEASE_TO_REFRESH = 2;
     	public static final int REFRESHING = 3;
     	public static final int ABORTING = 4;
+    }
+    
+    public void Refresh() {
+		mHeaderViewHolder.setVisibility(View.VISIBLE);
+		mRefreshState = RefreshState.REFRESHING;
+		mHeaderViewHolder.setRefreshingState(mRefreshState);
+		mHeaderView.setLayoutParams(new LayoutParams(mHeaderView.getLayoutParams().width, PULL_DOWN_LIMIT));
+		System.out.print("onRefresh");
+    	if (mOnRefreshListener != null) {
+    		mOnRefreshListener.onRefresh();
+    	}
+    }
+    
+    public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+    	mOnRefreshListener = onRefreshListener;
+    }
+    
+    public void onRefreshComplete() {
+		mHeaderViewHolder.setVisibility(View.GONE);
+		mRefreshState = RefreshState.PULL_TO_REFRESH;
+		mHeaderViewHolder.setRefreshingState(mRefreshState);
+		mHeaderView.setLayoutParams(new LayoutParams(mHeaderView.getLayoutParams().width, 0));
+    }
+    
+    public interface OnRefreshListener {
+    	public void onRefresh();
     }
 }

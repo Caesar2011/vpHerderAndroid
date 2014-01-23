@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/main" >
+        <TextView
+            android:layout_width="58sp" 
+            android:layout_height="match_parent"
+            android:padding="6sp"
+            android:id="@+id/teacher"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            style="@style/TextSize:VeryLarge"
+            android:textColor="@color/teacher" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/teacher"
+            android:layout_toLeftOf="@+id/changes"
+            android:id="@+id/box_subject"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            style="@android:style/TextAppearance.Large" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="6sp"
+                android:paddingTop="6sp"
+                android:paddingRight="6sp"
+                android:paddingBottom="0sp"
+                android:id="@+id/subject"
+                style="@android:style/TextAppearance.Medium"
+                android:textColor="@color/subject" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="6sp"
+                android:paddingTop="0sp"
+                android:paddingRight="6sp"
+                android:paddingBottom="6sp"
+                android:id="@+id/subject_subinfo"
+                android:layout_below="@+id/subject"
+                android:layout_alignLeft="@+id/subject"
+                style="@android:style/TextAppearance.Small"
+                android:textColor="@color/block" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/changes"
+            android:layout_alignParentRight="true"
+            style="@android:style/TextAppearance.Large" >
+            <TextView 
+                android:layout_width="45sp"
+                android:layout_height="match_parent"
+                android:id="@+id/textview_from"
+                android:layout_toLeftOf="@+id/to_arrow"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                style="@android:style/TextAppearance.Small" />
+            <TextView
+                android:padding="6sp"
+                android:layout_width="30sp" 
+                android:layout_height="match_parent"
+                android:text="@string/to_arrow"
+                android:id="@+id/to_arrow"
+                android:layout_toLeftOf="@+id/textview_to"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                style="@style/TextSize:VeryLarge" />
+            <TextView
+                android:layout_width="45sp"
+                android:layout_height="match_parent"
+                android:id="@+id/textview_to"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                style="@android:style/TextAppearance.Small" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/remark"
+            android:layout_below="@+id/main"
+            android:layout_centerVertical="true"
+            style="@android:style/TextAppearance.Medium"
+            android:textStyle="italic"
+            android:padding="6sp" />
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="subject">#d34937</color>
+    <color name="teacher">#000</color>
+    <color name="block">#888</color>
+    <color name="fragment_background">#fff</color>
+</resources>

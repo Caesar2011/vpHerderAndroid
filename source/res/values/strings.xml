@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">vpHerder</string>
+    <string name="title_section1">Heute</string>
+    <string name="title_section2">Einstellungen</string>
+    <string name="action_settings">Menü</string>
+
+    <string name="to_arrow">▶</string>
+</resources>

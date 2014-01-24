@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -103,5 +104,7 @@ public class TSAdapter extends ArrayAdapter<TSjsonAnnouncement> {
 		public TextView changes_from;
 		public TextView changes_to;
 		public TextView remark;
+		public View cancelbar;
+		public RelativeLayout changes;
 	}
 }

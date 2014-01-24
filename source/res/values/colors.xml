@@ -4,4 +4,5 @@
     <color name="teacher">#000</color>
     <color name="block">#888</color>
     <color name="fragment_background">#fff</color>
+    <color name="cancelled">#f00</color>
 </resources>

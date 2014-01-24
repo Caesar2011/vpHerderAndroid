@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -85,7 +86,20 @@ public class TSjsonAnnouncementAlteration extends TSjsonAnnouncement {
 		if (remark.equals("false")) {
 			holdAlteration.remark.setVisibility(View.GONE);
 		} else {
+			holdAlteration.remark.setVisibility(View.VISIBLE);
 			holdAlteration.remark.setText(remark);
+		}
+		
+		if (sFrom.equals("")) {
+			holdAlteration.changes.setVisibility(View.GONE);
+		} else {
+			holdAlteration.changes.setVisibility(View.VISIBLE);
+		}
+		
+		if (cancelled) {
+			holdAlteration.cancelbar.setVisibility(View.VISIBLE);
+		} else {
+			holdAlteration.cancelbar.setVisibility(View.GONE);
 		}
 	}
 
@@ -98,6 +112,8 @@ public class TSjsonAnnouncementAlteration extends TSjsonAnnouncement {
         holder.changes_from = (TextView)convertView.findViewById(R.id.textview_from);
         holder.changes_to = (TextView)convertView.findViewById(R.id.textview_to);
         holder.remark = (TextView)convertView.findViewById(R.id.remark);
+        holder.cancelbar = (View)convertView.findViewById(R.id.cancelbar);
+        holder.changes = (RelativeLayout)convertView.findViewById(R.id.changes);
         return holder;
 	}
 

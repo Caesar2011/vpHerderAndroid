@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class color {
         public static final int block=0x7f040002;
+        public static final int cancelled=0x7f040004;
         public static final int fragment_background=0x7f040003;
         public static final int subject=0x7f040000;
         public static final int teacher=0x7f040001;
@@ -30,22 +31,22 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000f;
-        public static final int box_subject=0x7f090008;
-        public static final int changes=0x7f090007;
-        public static final int listview=0x7f090003;
-        public static final int main=0x7f090005;
-        public static final int pager=0x7f090000;
-        public static final int pager_title_strip=0x7f090001;
-        public static final int remark=0x7f09000e;
-        public static final int section_label=0x7f090002;
-        public static final int subject=0x7f090009;
-        public static final int subject_subinfo=0x7f09000a;
-        public static final int teacher=0x7f090006;
-        public static final int text=0x7f090004;
-        public static final int textview_from=0x7f09000b;
-        public static final int textview_to=0x7f09000d;
-        public static final int to_arrow=0x7f09000c;
+        public static final int box_subject=0x7f080008;
+        public static final int cancelbar=0x7f08000f;
+        public static final int changes=0x7f080007;
+        public static final int listview=0x7f080003;
+        public static final int main=0x7f080005;
+        public static final int pager=0x7f080000;
+        public static final int pager_title_strip=0x7f080001;
+        public static final int remark=0x7f08000e;
+        public static final int section_label=0x7f080002;
+        public static final int subject=0x7f080009;
+        public static final int subject_subinfo=0x7f08000a;
+        public static final int teacher=0x7f080006;
+        public static final int text=0x7f080004;
+        public static final int textview_from=0x7f08000b;
+        public static final int textview_to=0x7f08000d;
+        public static final int to_arrow=0x7f08000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -55,9 +56,6 @@ public final class R {
         public static final int teacher_substitution_change=0x7f030004;
         public static final int teacher_substitution_row_alteration=0x7f030005;
         public static final int teacher_substitution_row_remark=0x7f030006;
-    }
-    public static final class menu {
-        public static final int main=0x7f080000;
     }
     public static final class string {
         public static final int action_settings=0x7f060007;

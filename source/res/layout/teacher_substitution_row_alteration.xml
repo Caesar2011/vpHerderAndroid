@@ -91,4 +91,20 @@
             style="@android:style/TextAppearance.Medium"
             android:textStyle="italic"
             android:padding="6sp" />
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cancelbar"
+        android:layout_alignLeft="@+id/main"
+        android:layout_alignTop="@+id/main"
+        android:layout_alignRight="@+id/main"
+        android:layout_alignBottom="@+id/main">
+        <View
+            android:background="@color/cancelled"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="15sp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 </RelativeLayout>
